@@ -23,19 +23,19 @@ ${LINE}
 ${LINE}
 📂 GÉNÉRAL
 ${LINE}
-▸ menu → afficher le menu
+▸ menu →  le menu
 ▸ owner → propriétaire
 ▸ alive → état du bot
-▸ humm → coup d'œil (vue unique)
+▸ humm → coup d'œil
 ▸ info → infos du bot
 ▸ open → ouvrir le groupe
 ▸ close → fermer le groupe
-▸ warn @user → avertir un membre
-▸ hidetag <texte> → tag caché
-▸ antilink on/off → bloquer les liens
-▸ welcome on/off → message de bienvenue
-▸ mode public/private → change le mode
-▸ antidelete on/off → anti-suppression
+▸ warn → avertir un membre
+▸ hidetag → tag caché
+▸ antilink → bloquer les liens
+▸ welcome → message de bienvenue
+▸ mode → change le mode
+▸ antidelete → anti-suppression
 ▸ kick @user → expulser un membre
 ${LINE}`;
 
