@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b14">
+<title>LMC-SOLUTION · CENTRAL-HEX</title>
+<meta name="description" content="Connecte LMC-SOLUTION à ton WhatsApp — code de jumelage ou QR, en quelques secondes.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💎</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #070b14;
+    --bg-1: #0a0f1c;
+    --bg-2: #101828;
+    --panel: #0e1420;
+    --panel-2: #161f30;
+    --line: #22314a;
+    --line-soft: #1a2538;
+    --text: #eef2fb;
+    --muted: #8a9ab2;
+    --muted-dim: #5c6c85;
+    --gold: #f0b429;
+    --gold-2: #ffd873;
+    --blue: #3e7bfa;
+    --blue-2: #7aa8ff;
+    --grad: linear-gradient(120deg, var(--blue), var(--gold) 85%);
+    --radius: 22px;
+    --ease: cubic-bezier(.16,1,.3,1);
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; min-height:100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .display{ font-family: 'Sora', sans-serif; }
+  a{ color: inherit; }
+  button{ font: inherit; }
+  ::selection{ background: rgba(62,123,250,.32); color:#fff; }
+
+  #mesh{ position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .bgfx{
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 900px 620px at 12% -8%, rgba(62,123,250,.16), transparent 60%),
+      radial-gradient(ellipse 700px 600px at 100% 8%, rgba(240,180,41,.12), transparent 55%),
+      radial-gradient(ellipse 900px 700px at 50% 118%, rgba(62,123,250,.06), transparent 60%),
+      linear-gradient(180deg, var(--bg-1), var(--bg) 40%);
+  }
+  .bgfx svg{ position:absolute; inset:0; width:100%; height:100%; opacity:.09; }
+  .diamond-shape{ animation: drift 14s ease-in-out infinite; }
+  .diamond-shape.d2{ animation-delay: -5s; }
+  .diamond-shape.d3{ animation-delay: -9s; }
+  @keyframes drift{ 0%,100%{ transform: translateY(0) rotate(0deg); } 50%{ transform: translateY(-16px) rotate(6deg); } }
+
+  .wrap{ position:relative; z-index:1; max-width: 880px; margin: 0 auto; padding: 0 22px; }
+
+  header{
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(14px);
+    background: rgba(7,11,20,.66);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .header-inner{
+    max-width: 880px; margin: 0 auto; padding: 16px 22px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:11px; }
+  .brand-mark{
+    width:36px; height:36px; border-radius:10px; overflow:hidden; flex:none;
+    box-shadow: 0 0 0 1px var(--line), 0 8px 22px rgba(240,180,41,.18);
+  }
+  .brand-mark img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .brand-name{ font-size:16px; font-weight:800; letter-spacing:.03em; }
+  .chan-tag{
+    font-size:11.5px; color: var(--muted); border:1px solid var(--line);
+    padding:7px 13px; border-radius:999px; letter-spacing:.03em;
+    display:flex; align-items:center; gap:6px;
+  }
+  .chan-tag .pulse-dot{
+    width:6px; height:6px; border-radius:50%; background: var(--gold);
+    animation: pulse-ring 2s infinite;
+  }
+  @keyframes pulse-ring{
+    0%{ box-shadow: 0 0 0 0 rgba(240,180,41,.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(240,180,41,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(240,180,41,0); }
+  }
+
+  .hero{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding: 58px 0 20px;
+  }
+  .portrait{
+    position: relative; width: 168px; height: 168px; margin-bottom: 30px;
+    animation: float-y 5s ease-in-out infinite;
+  }
+  @keyframes float-y{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); } }
+  .portrait .halo{
+    position:absolute; inset:-22px; border-radius:50%;
+    background: conic-gradient(from 0deg, var(--blue), var(--gold), var(--blue-2), var(--blue));
+    filter: blur(18px); opacity:.5;
+    animation: spin 11s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .portrait .ring{
+    position:absolute; inset:-9px; border-radius:50%;
+    border: 1.5px solid rgba(240,180,41,.4);
+    animation: ring-pulse 3s var(--ease) infinite;
+  }
+  @keyframes ring-pulse{
+    0%,100%{ transform: scale(1); opacity:.7; }
+    50%{ transform: scale(1.08); opacity:.15; }
+  }
+  .portrait img{
+    position:relative; width:100%; height:100%; border-radius:50%; object-fit:cover;
+    box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px rgba(240,180,41,.35), 0 30px 60px rgba(62,123,250,.15);
+  }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; color: var(--gold);
+    background: rgba(240,180,41,.09);
+    border: 1px solid rgba(240,180,41,.28);
+    padding: 7px 15px; border-radius: 999px;
+    margin-bottom: 22px;
+    opacity:0; animation: rise .7s var(--ease) forwards; animation-delay:.05s;
+  }
+  h1{
+    font-size: clamp(32px, 5.6vw, 47px); line-height: 1.16; margin: 0 0 18px; font-weight: 800;
+    letter-spacing: -.01em;
+    opacity:0; animation: rise .7s var(--ease) forwards; animation-delay:.15s;
+  }
+  h1 .accent{
+    background: var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+    background-size: 200% 100%;
+    animation: shimmer 5s ease-in-out infinite;
+  }
+  @keyframes shimmer{ 0%,100%{ background-position: 0% 50%; } 50%{ background-position: 100% 50%; } }
+  .hero p{
+    color: var(--muted); font-size:16px; max-width:500px; margin:0 auto;
+    opacity:0; animation: rise .7s var(--ease) forwards; animation-delay:.28s;
+  }
+  @keyframes rise{ from{ opacity:0; transform: translateY(14px); } to{ opacity:1; transform:none; } }
+
+  .hero-ctas{
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:30px;
+    opacity:0; animation: rise .7s var(--ease) forwards; animation-delay:.4s;
+  }
+  .btn-ghost-link{
+    padding:13px 22px; border-radius:12px; border:1px solid var(--line); color: var(--text);
+    font-weight:600; font-size:14px; text-decoration:none; transition: border-color .2s, background .2s, transform .15s;
+  }
+  .btn-ghost-link:hover{ border-color: var(--gold); background: rgba(240,180,41,.06); transform: translateY(-1px); }
+  .btn-solid-link{
+    padding:13px 24px; border-radius:12px; border:none; background: var(--grad); color:#0b1220;
+    font-weight:700; font-size:14px; text-decoration:none; transition: filter .2s, transform .15s;
+  }
+  .btn-solid-link:hover{ filter:brightness(1.08); transform: translateY(-1px); }
+
+  .reveal{ opacity:0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  section{ padding: 50px 0; }
+  .section-label{
+    font-size: 12px; color: var(--gold); letter-spacing:.08em; text-transform:uppercase;
+    margin-bottom: 8px; text-align:center; font-weight:700;
+  }
+  h2{ font-size: clamp(22px,3.4vw,27px); margin: 0 0 8px; text-align:center; }
+  .section-intro{ color: var(--muted); font-size:14.5px; text-align:center; margin:0 auto 30px; max-width:52ch; }
+
+  .grid-features{ display:grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  @media(max-width:720px){ .grid-features{ grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:480px){ .grid-features{ grid-template-columns: 1fr; } }
+  .feature{
+    background: var(--panel); border:1px solid var(--line-soft); border-radius:16px; padding:20px;
+    transition: transform .25s var(--ease), border-color .25s, box-shadow .25s;
+    position: relative; overflow:hidden;
+  }
+  .feature::before{
+    content:""; position:absolute; inset:0; opacity:0; transition: opacity .25s;
+    background: radial-gradient(circle at 30% 0%, rgba(62,123,250,.14), transparent 65%);
+  }
+  .feature:hover{ transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 18px 40px rgba(62,123,250,.10); }
+  .feature:hover::before{ opacity:1; }
+  .feature .icon{ font-size:21px; margin-bottom:11px; display:inline-block; }
+  .feature h3{ font-family:'Sora',sans-serif; font-size:14.5px; margin:0 0 6px; position:relative; }
+  .feature p{ color: var(--muted); font-size:12.5px; line-height:1.55; margin:0; position:relative; }
+
+  .card{
+    background: var(--panel); border: 1px solid var(--line-soft); border-radius: var(--radius);
+    padding: 28px; margin-top: 6px; box-shadow: 0 40px 90px rgba(0,0,0,.5);
+    position: relative; overflow: hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:-45%; right:-25%; width:65%; height:190%;
+    background: radial-gradient(circle, rgba(62,123,250,.10), transparent 65%);
+    pointer-events:none;
+  }
+  .tabs{
+    position:relative; z-index:1;
+    display:flex; gap:0; background: var(--bg-2); padding:5px; border-radius:14px; margin-bottom:24px;
+  }
+  .tab-indicator{
+    position:absolute; top:5px; bottom:5px; left:5px; width: calc(50% - 5px);
+    background: var(--panel-2); border-radius:10px; box-shadow: inset 0 0 0 1px var(--line-soft);
+    transition: transform .3s var(--ease);
+    z-index:0;
+  }
+  .tab{
+    flex:1; text-align:center; padding: 12px 0; border-radius:10px; cursor:pointer;
+    color: var(--muted); font-weight:600; font-size:14px; border:none; background:transparent;
+    transition: color .2s; position:relative; z-index:1;
+  }
+  .tab.active{ color: var(--text); }
+
+  .field{ position:relative; z-index:1; }
+  label{ display:block; font-size:13px; color: var(--muted); margin-bottom:9px; font-weight:500; }
+  input[type=tel]{
+    width:100%; background: var(--bg-2); border:1.5px solid var(--line); color: var(--text);
+    padding:15px 16px; border-radius:13px; font-size:16.5px; outline:none;
+    transition: border-color .2s, box-shadow .2s; letter-spacing:.02em;
+  }
+  input[type=tel]:focus{ border-color: var(--blue); box-shadow: 0 0 0 4px rgba(62,123,250,.14); }
+  .hint{ font-size:12px; color: var(--muted-dim); margin-top:9px; }
+
+  .go-btn{
+    position:relative; z-index:1; overflow:hidden;
+    width:100%; margin-top:20px; padding:16px 0; border:none; border-radius:14px;
+    background: var(--grad); color:#0b1220; font-weight:700; font-size:15px; cursor:pointer;
+    transition: filter .2s, transform .08s; letter-spacing:.02em;
+  }
+  .go-btn::after{
+    content:""; position:absolute; inset:0; background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: translateX(-120%); transition: transform .6s;
+  }
+  .go-btn:hover::after{ transform: translateX(120%); }
+  .go-btn:hover{ filter:brightness(1.06); }
+  .go-btn:active{ transform:scale(.985); }
+  .go-btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+  .result{
+    position:relative; z-index:1;
+    display:none; margin-top:24px; padding:24px; border-radius:16px;
+    background: var(--bg-2); border:1px dashed rgba(62,123,250,.4); text-align:center;
+  }
+  .result.show{ display:block; animation: pop-in .4s var(--ease); }
+  @keyframes pop-in{ from{ opacity:0; transform: scale(.96); } to{ opacity:1; transform:none; } }
+  .result-value{
+    font-family:'Sora', sans-serif; font-size:29px; font-weight:700; letter-spacing:.09em;
+    color: var(--text); min-height:38px; word-break: break-all;
+  }
+  .result p{ color: var(--muted); font-size:13px; margin:15px 0 0; }
+  .result img{ border-radius:12px; background:#fff; padding:10px; }
+
+  .waiting-dots span{
+    display:inline-block; width:5px; height:5px; border-radius:50%; background: var(--gold);
+    margin:0 2px; animation: dot-bounce 1.2s infinite ease-in-out;
+  }
+  .waiting-dots span:nth-child(2){ animation-delay:.15s; }
+  .waiting-dots span:nth-child(3){ animation-delay:.3s; }
+  @keyframes dot-bounce{ 0%,80%,100%{ transform: scale(.6); opacity:.4; } 40%{ transform: scale(1); opacity:1; } }
+
+  .reset-btn{
+    background: rgba(62,123,250,.08); color: var(--blue-2); border:1px solid rgba(62,123,250,.32);
+    padding:11px 20px; border-radius:11px; cursor:pointer; font-weight:600; font-size:13px;
+    transition: background .2s;
+  }
+  .reset-btn:hover{ background: rgba(62,123,250,.16); }
+
+  .step-list{ display:grid; gap:12px; position:relative; }
+  .step{
+    display:flex; gap:15px; align-items:flex-start; background: var(--panel);
+    border:1px solid var(--line-soft); border-radius:15px; padding:17px 19px;
+    transition: transform .2s var(--ease), border-color .2s;
+  }
+  .step:hover{ transform: translateX(4px); border-color: var(--blue); }
+  .step-num{
+    width:28px; height:28px; border-radius:9px; flex:none;
+    background: rgba(240,180,41,.12); color: var(--gold); font-weight:700; font-size:13px;
+    display:grid; place-items:center; font-family:'Sora',sans-serif;
+  }
+  .step-text b{ color: var(--text); }
+  .step-text{ color: var(--muted); font-size:14px; }
+
+  .cmd-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:11px; }
+  .cmd-chip{
+    background: var(--panel); border:1px solid var(--line-soft); border-radius:13px;
+    padding:14px 11px; text-align:center;
+    transition: transform .2s var(--ease), border-color .2s, background .2s;
+  }
+  .cmd-chip:hover{ transform: translateY(-3px); border-color: var(--blue); background: var(--panel-2); }
+  .cmd-chip b{ font-family:'Sora', sans-serif; font-size:13.5px; color: var(--gold); }
+  .cmd-chip p{ margin:6px 0 0; font-size:11px; color: var(--muted); line-height:1.4; }
+  @media(max-width:560px){ .cmd-grid{ grid-template-columns: repeat(2,1fr); } }
+
+  footer{
+    margin-top: 30px; padding: 26px 0 40px; border-top:1px solid var(--line-soft);
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+    color: var(--muted); font-size:12.5px;
+  }
+  footer .credit b{ color: var(--text); }
+  footer .system{ display:inline-flex; align-items:center; gap:6px; font-weight:600; color: var(--gold); }
+
+  @media(prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  @media(max-width:560px){
+    .card{ padding:20px; }
+    .result-value{ font-size:23px; }
+    .portrait{ width:130px; height:130px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="mesh"></canvas>
+<div class="bgfx">
+  <svg viewBox="0 0 800 900" preserveAspectRatio="xMidYMid slice">
+    <g class="diamond-shape d1"><rect x="60" y="120" width="26" height="26" transform="rotate(45 73 133)" fill="none" stroke="#3e7bfa" stroke-width="1.5"/></g>
+    <g class="diamond-shape d2"><rect x="700" y="240" width="34" height="34" transform="rotate(45 717 257)" fill="none" stroke="#f0b429" stroke-width="1.5"/></g>
+    <g class="diamond-shape d3"><rect x="380" y="600" width="20" height="20" transform="rotate(45 390 610)" fill="none" stroke="#7aa8ff" stroke-width="1.5"/></g>
+    <g class="diamond-shape d2"><rect x="120" y="700" width="22" height="22" transform="rotate(45 131 711)" fill="none" stroke="#f0b429" stroke-width="1.5"/></g>
+    <g class="diamond-shape d1"><rect x="650" y="60" width="18" height="18" transform="rotate(45 659 69)" fill="none" stroke="#3e7bfa" stroke-width="1.5"/></g>
+  </svg>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark"><img src="https://i.ibb.co/MxH346HF/file-00000000cd4c8243abb6a1c5623a7bcd.png" alt="LMC-SOLUTION"></div>
+      <span class="brand-name display">LMC-SOLUTION</span>
+    </div>
+    <span class="chan-tag"><span class="pulse-dot"></span> CENTRAL-HEX</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="portrait">
+      <div class="halo"></div>
+      <div class="ring"></div>
+      <img src="https://i.ibb.co/MxH346HF/file-00000000cd4c8243abb6a1c5623a7bcd.png" alt="LMC-SOLUTION">
+    </div>
+
+    <div class="eyebrow">💎 Sans préfixe · tape simplement <b>menu</b></div>
+    <h1 class="display">Active <span class="accent">LMC-SOLUTION</span><br>sur ton WhatsApp</h1>
+    <p>Entre ton numéro, récupère ton code, colle-le dans WhatsApp. Ton bot est actif en moins d'une minute — aucun panel, aucune installation.</p>
+
+    <div class="hero-ctas">
+      <a href="#session" class="btn-solid-link">✨ Connecter maintenant</a>
+      <a href="#cmds" class="btn-ghost-link">Voir les commandes</a>
+    </div>
+  </section>
+
+  <section class="reveal" id="session">
+    <div class="section-label">// Connexion</div>
+    <h2 class="display">Génère ta session</h2>
+    <p class="section-intro">Choisis ta méthode de connexion préférée.</p>
+
+    <div class="card">
+      <div class="tabs">
+        <div class="tab-indicator" id="tabIndicator"></div>
+        <button class="tab active" id="pairTab" onclick="switchMethod('pair')">🔑 Code PAIR</button>
+        <button class="tab" id="qrTab" onclick="switchMethod('qr')">▣ QR Code</button>
+      </div>
+
+      <div class="field" id="pairFields">
+        <label for="phone">Numéro WhatsApp (avec indicatif pays, sans le +)</label>
+        <input type="tel" id="phone" placeholder="Ex : 224626279409" inputmode="numeric">
+        <p class="hint">Format international complet — 224 pour la Guinée, 33 pour la France, etc.</p>
+      </div>
+
+      <button class="go-btn" id="generateBtn" onclick="generateSession()">✨ OBTENIR LE CODE</button>
+
+      <div class="result" id="result">
+        <div class="result-value" id="sessionValue">
+          <span class="waiting-dots"><span></span><span></span><span></span></span>
+        </div>
+        <p id="resultText">Patiente quelques secondes…</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-label">// Étapes</div>
+    <h2 class="display">Comment ça marche</h2>
+    <p class="section-intro">Quatre étapes, sans quitter cette page.</p>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-text"><b>Génère ton code</b> — entre ton numéro (ou choisis le QR) puis lance la génération.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-text"><b>Ouvre WhatsApp</b> — Réglages ⋮ → Appareils liés → Lier un appareil.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-text"><b>Lie ton compte</b> — « Lier avec un numéro de téléphone » puis entre le code, ou scanne le QR.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-text"><b>C'est prêt</b> — tape <b>menu</b> dans une conversation pour voir toutes les commandes.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="section-label">// Fonctionnalités</div>
+    <h2 class="display">Pensé pour la modération de groupe</h2>
+    <p class="section-intro">Un bot complet, direct, sans configuration compliquée.</p>
+    <div class="grid-features">
+      <article class="feature"><div class="icon">⚡</div><h3>Sans préfixe</h3><p>Tape directement "menu", "kick", "warn"… pas de symbole à retenir.</p></article>
+      <article class="feature"><div class="icon">🔑</div><h3>Connexion instantanée</h3><p>Code de jumelage ou QR — actif en quelques secondes, sans panel.</p></article>
+      <article class="feature"><div class="icon">🛡️</div><h3>Modération complète</h3><p>Kick, warn, antilink, hidetag — tout pour gérer tes groupes.</p></article>
+      <article class="feature"><div class="icon">🗑️</div><h3>Anti-suppression</h3><p>Récupère et te renvoie les messages supprimés du chat.</p></article>
+      <article class="feature"><div class="icon">👁️</div><h3>Vues uniques</h3><p>Capture les médias vue-unique et te les renvoie en privé.</p></article>
+      <article class="feature"><div class="icon">🔒</div><h3>Sécurisé</h3><p>Ta session reste privée — rien n'est partagé avec des tiers.</p></article>
+    </div>
+  </section>
+
+  <section class="reveal" id="cmds">
+    <div class="section-label">// Commandes</div>
+    <h2 class="display">Ce que LMC-SOLUTION sait faire</h2>
+    <p class="section-intro">14 commandes, sans préfixe.</p>
+    <div class="cmd-grid">
+      <div class="cmd-chip"><b>menu</b><p>Affiche le menu</p></div>
+      <div class="cmd-chip"><b>owner</b><p>Contacts créateurs</p></div>
+      <div class="cmd-chip"><b>alive</b><p>État du bot</p></div>
+      <div class="cmd-chip"><b>humm</b><p>Vue unique</p></div>
+      <div class="cmd-chip"><b>info</b><p>Infos du bot</p></div>
+      <div class="cmd-chip"><b>open</b><p>Ouvrir le groupe</p></div>
+      <div class="cmd-chip"><b>close</b><p>Fermer le groupe</p></div>
+      <div class="cmd-chip"><b>warn</b><p>Avertir un membre</p></div>
+      <div class="cmd-chip"><b>hidetag</b><p>Tag caché</p></div>
+      <div class="cmd-chip"><b>antilink</b><p>Bloquer les liens</p></div>
+      <div class="cmd-chip"><b>welcome</b><p>Message de bienvenue</p></div>
+      <div class="cmd-chip"><b>mode</b><p>Public / privé</p></div>
+      <div class="cmd-chip"><b>antidelete</b><p>Récupère les suppressions</p></div>
+      <div class="cmd-chip"><b>kick</b><p>Expulser un membre</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Créé par <b>IB-SACKO</b> &amp; <b>SALGA</b> · Propriétaire <b>L'ART BOSS</b></div>
+    <div class="system">💎 Système CENTRAL-HEX</div>
+  </footer>
+
+</div>
+
+<script>
+  (function mesh(){
+    const canvas = document.getElementById('mesh');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = Math.min(window.innerHeight, 1400);
+    }
+    function makeParticles(){
+      const count = Math.min(40, Math.floor(w / 28));
+      particles = Array.from({length: count}, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.6 + 0.5,
+        speedY: (Math.random() - 0.5) * 0.18,
+        speedX: (Math.random() - 0.5) * 0.18,
+        alpha: Math.random() * 0.4 + 0.1,
+        hue: Math.random() > 0.5 ? '62,123,250' : '240,180,41'
+      }));
+    }
+    function tick(){
+      ctx.clearRect(0, 0, w, h);
+      for (const p of particles){
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y < -10) p.y = h + 10;
+        if (p.y > h + 10) p.y = -10;
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${p.hue},${p.alpha})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (!reduced) requestAnimationFrame(tick);
+    }
+    resize();
+    makeParticles();
+    window.addEventListener('resize', () => { resize(); makeParticles(); });
+    if (!reduced) requestAnimationFrame(tick);
+    else tick();
+  })();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  let method = "pair";
+  let pollTimer = null;
+
+  function stopPoll(){ if (pollTimer) clearInterval(pollTimer); }
+
+  function switchMethod(type){
+    method = type;
+    document.getElementById("pairTab").classList.toggle("active", type==="pair");
+    document.getElementById("qrTab").classList.toggle("active", type==="qr");
+    document.getElementById("pairFields").style.display = type==="pair" ? "block" : "none";
+    document.getElementById("generateBtn").textContent =
+      type==="pair" ? "✨ OBTENIR LE CODE" : "▣ GÉNÉRER LE QR CODE";
+    document.getElementById("tabIndicator").style.transform =
+      type==="pair" ? "translateX(0)" : "translateX(100%)";
+    document.getElementById("result").classList.remove("show");
+    stopPoll();
+  }
+
+  function pollStatus(sessionId, onConnected){
+    stopPoll();
+    pollTimer = setInterval(async () => {
+      try {
+        const r = await fetch('/api/status/' + sessionId);
+        const data = await r.json();
+        if (data.status === 'connected') {
+          stopPoll();
+          onConnected();
+        } else if (data.status === 'error' || data.status === 'logged_out') {
+          stopPoll();
+          document.getElementById("resultText").textContent = "❌ La session a expiré, réessaie.";
+        }
+      } catch (e) { /* ignore */ }
+    }, 2500);
+  }
+
+  async function generateSession(){
+    const result = document.getElementById("result");
+    const value = document.getElementById("sessionValue");
+    const text = document.getElementById("resultText");
+    const btn = document.getElementById("generateBtn");
+
+    result.classList.add("show");
+
+    if (method === "pair") {
+      const phone = document.getElementById("phone").value.replace(/\D/g,"");
+      if (phone.length < 8){
+        alert("Entre un numéro WhatsApp valide avec l'indicatif pays.");
+        return;
+      }
+
+      value.innerHTML = '<span class="waiting-dots"><span></span><span></span><span></span></span>';
+      text.textContent = "Génération du code…";
+      btn.disabled = true;
+
+      try {
+        const r = await fetch('/api/pair', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ number: phone })
+        });
+        const data = await r.json();
+        btn.disabled = false;
+
+        if (data.error) { value.innerHTML = "❌"; text.textContent = data.error; return; }
+
+        if (data.connected) {
+          value.innerHTML = "✅";
+          text.innerHTML = 'Ce numéro est déjà connecté à LMC-SOLUTION.<br><br><button id="resetBtn" class="reset-btn">🔌 Déconnecter ce numéro</button>';
+          document.getElementById("resetBtn").onclick = async () => {
+            const rb = document.getElementById("resetBtn");
+            rb.disabled = true; rb.textContent = "⏳ Déconnexion…";
+            try {
+              const rr = await fetch('/api/reset', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ number: phone })
+              });
+              const rdata = await rr.json();
+              if (rdata.ok) {
+                value.innerHTML = "🔌";
+                text.textContent = "Déconnecté. Clique à nouveau sur \"Obtenir le code\" pour relancer un pairing.";
+              } else {
+                text.textContent = "❌ " + (rdata.error || "Erreur lors de la déconnexion.");
+              }
+            } catch (e) {
+              text.textContent = "❌ Erreur de connexion au serveur.";
+            }
+          };
+          return;
+        }
+
+        value.textContent = data.code;
+        value.style.cursor = "pointer";
+        value.title = "Cliquer pour copier";
+        value.onclick = () => {
+          navigator.clipboard.writeText(data.code.replace(/-/g, ""));
+          text.textContent = "📋 Code copié ! Colle-le dans WhatsApp → Appareils liés.";
+        };
+        text.textContent = "Ouvre WhatsApp → Appareils liés → Lier un appareil → Lier avec un numéro → entre ce code.";
+
+        pollStatus(data.sessionId, () => {
+          value.innerHTML = "✅";
+          text.innerHTML = "LMC-SOLUTION est connecté ! Tape <b>menu</b> sur WhatsApp pour commencer.";
+        });
+      } catch (e) {
+        btn.disabled = false;
+        value.innerHTML = "❌"; text.textContent = "Erreur de connexion au serveur.";
+      }
+
+    } else {
+      value.innerHTML = '<span class="waiting-dots"><span></span><span></span><span></span></span>';
+      text.textContent = "Génération du QR…";
+      btn.disabled = true;
+
+      try {
+        const r = await fetch('/api/qr', { method: 'POST' });
+        const data = await r.json();
+        btn.disabled = false;
+        if (data.error) { value.innerHTML = "❌"; text.textContent = data.error; return; }
+
+        stopPoll();
+        pollTimer = setInterval(async () => {
+          try {
+            const sr = await fetch('/api/status/' + data.sessionId);
+            const sdata = await sr.json();
+            if (sdata.qr) {
+              value.innerHTML = `<img src="${sdata.qr}" style="width:190px">`;
+              text.textContent = "Scanne ce QR avec WhatsApp → Appareils liés.";
+            }
+            if (sdata.status === 'connected') {
+              stopPoll();
+              value.innerHTML = "✅";
+              text.innerHTML = "LMC-SOLUTION est connecté ! Tape <b>menu</b> sur WhatsApp pour commencer.";
+            } else if (sdata.status === 'error' || sdata.status === 'logged_out') {
+              stopPoll();
+              text.textContent = "❌ La session a expiré, réessaie.";
+            }
+          } catch (e) { /* ignore */ }
+        }, 2000);
+      } catch (e) {
+        btn.disabled = false;
+        value.innerHTML = "❌"; text.textContent = "Erreur de connexion au serveur.";
+      }
+    }
+
+    result.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+</script>
+</body>
+</html>
